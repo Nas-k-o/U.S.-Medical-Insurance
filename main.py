@@ -1,9 +1,10 @@
 #I'll be using CSV for this project
 import csv
+from itertools import count
 from logging.config import listen
 from pickle import FLOAT
 
-#Lists to store each type of data individually
+#Lists to store each type of data observation individually
 listAge = list()
 listSex = list()
 listBmi = list()
@@ -16,7 +17,7 @@ listCharges = list()
 with open("insurance.csv") as insurance_csv:
     ins_dict = csv.DictReader(insurance_csv)
 
-    #Separates the types of date in its allocated position
+    #Separates the types of date in its allocated lists
     for row in ins_dict:
         listAge.append(int(row["age"]))
         listSex.append(row["sex"])
@@ -37,7 +38,7 @@ def Main():
     print("5 - Smoker functions")
     print("6 - Region functions")
     print("7 - Charges functions")
-    print("8 - Exit")
+    print("8 - Cross column functions")
     choice = int(input("Select option from the ones above: "))
     if choice == 1:
         Age()
@@ -53,8 +54,10 @@ def Main():
         Region()
     elif choice == 7:
         Charges()
+    elif choice == 8:
+        Additional()
 
-#Definign Methods for each data category
+#Definign Methods for each data category individually
 def Age():
     print("--------------------")
     print("1 - Average age")
@@ -98,13 +101,34 @@ def Sex():
 def Bmi():
     print("--------------------")
     print("1 - Check average BMI count")
-    print("2 - Check count of over/under BMI Index COMMING SOON")
+    print("2 - Check count of over/under BMI Index")
     print("3 - Back to Main")
     choice = int(input("Select option: "))
     if choice == 1:
         avgBmi = sum(listBmi) / len(listBmi)
         print(f"Average BMI  of this study is {avgBmi}...")
         Bmi()
+    elif choice == 2:
+        choiceI = input("Under/Over: ").lower()
+        if choiceI == "under":
+            under = float(input("Enter BMI Index: "))
+            count = 0
+            for bmi in listBmi:
+                if bmi <= under:
+                    count += 1
+            print(f"In our study we have {count} cases with BMI under or equal to {under}")
+            Bmi()
+        elif choiceI == "over":
+            over = float(input("Enter BMI Index: "))
+            count = 0
+            for bmi in listBmi:
+                if bmi >= over:
+                    count += 1
+            print(f"In our study we have {count} cases with BMI over or equal to {over}")
+            Bmi()
+        else:
+            print("Not available option")
+            Bmi()
     elif choice == 3:
         Main()
     else:
@@ -175,18 +199,160 @@ def Region():
 def Charges():
     print("--------------------")
     print("1 - Check average charge")
-    print("2 - Check count of over/under selected charge COMMING SOON")
+    print("2 - Check count of over/under selected charge")
     print("3 - Back to Main")
     choice = int(input("Select option: "))
     if choice == 1:
         avgCharge = sum(listCharges) / len(listCharges)
         print(f"Average BMI  of this study is {avgCharge}...")
         Charges()
+    elif choice == 2:
+        choiceI = input("Under/Over: ").lower()
+        if choiceI == "under":
+            under = float(input("Enter any amount of charge: "))
+            count = 0
+            for charges in listCharges:
+                if charges <= under:
+                    count += 1
+            print(f"In our study we have {count} cases with charges under or equal to {under}")
+            Charges()
+        elif choiceI == "over":
+            over = float(input("Enter BMI Index: "))
+            count = 0
+            for charges in listCharges:
+                if charges >= over:
+                    count += 1
+            print(f"In our study we have {count} cases with charges over or equal to {over}")
+            Charges()
+        else:
+            print("Not available option")
+            Charges()
+
     elif choice == 3:
         Main()
     else:
         print("Not available option")
         Charges()
+
+
+#Adding cross columns functions here
+def Additional():
+    print("--------------------")
+    print("1 - Average charge for different genders")
+    print("2 - Gender/Smoking ratio")
+    print("3 - Average charge for a region")
+    print("4 - Back to Main - MORE OPTIONS SOON")
+    choice = int(input("Select option: "))
+    if choice == 1:
+        countSex = 0
+        sumFemale = 0
+        sumMale = 0;
+        sumCharge = 0
+        for person in listSex:
+            if listSex[countSex] == "male":
+                sumCharge += listCharges[countSex]
+                countSex += 1
+                sumMale += 1
+            else:
+                countSex += 1
+        print(f"Average charge for Males is {sumCharge / sumMale}")
+        countSex = 0
+        sumCharge = 0
+        for person in listSex:
+            if listSex[countSex] == "female":
+                sumCharge += listCharges[countSex]
+                countSex += 1
+                sumFemale += 1
+            else:
+                countSex += 1
+        print(f"Average charge for Females is {sumCharge / sumFemale}")
+        Additional()
+    elif choice == 2:
+        countSex = 0
+        sumSmoke = 0
+        sumMale = 0
+        sumFemale = 0
+        for person in listSex:
+            if listSex[countSex] == "male":
+                if listSmoker[countSex] == "yes":
+                    sumSmoke += 1
+                    countSex += 1
+                    sumMale += 1
+                else:
+                    countSex += 1
+                    sumMale += 1
+            else:
+                countSex += 1
+        print(f"{sumSmoke} males smoke from {sumMale} males in this study")
+        countSex = 0
+        sumSmoke = 0
+        for person in listSex:
+            if listSex[countSex] == "female":
+                if listSmoker[countSex] == "yes":
+                    sumSmoke += 1
+                    countSex += 1
+                    sumFemale += 1
+                else:
+                    countSex += 1
+                    sumFemale += 1
+            else:
+                countSex += 1
+        print(f"{sumSmoke} females smoke from {sumFemale} females in this study")
+        Additional()
+    elif choice == 3:
+        countRegion = 0
+        sumRegion = 0
+        sumCharge = 0
+        for region in listRegion:
+            if listRegion[countRegion] == "southwest":
+                sumRegion += 1
+                sumCharge += listCharges[countRegion]
+                countRegion += 1
+            else:
+                countRegion += 1
+        print(f"Average charge for SOUTHWEST region is {sumCharge / sumRegion}")
+        countRegion = 0
+        sumRegion = 0
+        sumCharge = 0
+        for region in listRegion:
+            if listRegion[countRegion] == "southeast":
+                sumRegion += 1
+                sumCharge += listCharges[countRegion]
+                countRegion += 1
+            else:
+                countRegion += 1
+        print(f"Average charge for SOUTHEAST region is {sumCharge / sumRegion}")
+        countRegion = 0
+        sumRegion = 0
+        sumCharge = 0
+        for region in listRegion:
+            if listRegion[countRegion] == "northwest":
+                sumRegion += 1
+                sumCharge += listCharges[countRegion]
+                countRegion += 1
+            else:
+                countRegion += 1
+        print(f"Average charge for NORTHWEST region is {sumCharge / sumRegion}")
+        countRegion = 0
+        sumRegion = 0
+        sumCharge = 0
+        for region in listRegion:
+            if listRegion[countRegion] == "northeast":
+                sumRegion += 1
+                sumCharge += listCharges[countRegion]
+                countRegion += 1
+            else:
+                countRegion += 1
+        print(f"Average charge for NORTHEAST region is {sumCharge / sumRegion}")
+        countRegion = 0
+        sumRegion = 0
+        sumCharge = 0
+
+    elif choice == 4:
+        Main()
+    else:
+        print("Invalid option")
+        Additional()
 
 
 Main()
