@@ -3,36 +3,24 @@ import csv
 from itertools import count
 from logging.config import listen
 from pickle import FLOAT
+import pandas as pd
 
-#Lists to store each type of data observation individually
-listAge = list()
-listSex = list()
-listBmi = list()
-listChildren = list()
-listSmoker = list()
-listRegion = list()
-listCharges = list()
+studyDataFrame = pd.read_csv("insurance.csv")
 
-#opening insurance.csv
-with open("insurance.csv") as insurance_csv:
-    ins_dict = csv.DictReader(insurance_csv)
-
-    #Separates the types of date in its allocated lists
-    for row in ins_dict:
-        listAge.append(int(row["age"]))
-        listSex.append(row["sex"])
-        listBmi.append(float(row["bmi"]))
-        listChildren.append(int(row["children"]))
-        listSmoker.append(row["smoker"])
-        listRegion.append(row["region"])
-        listCharges.append(float(row["charges"]))
+listAge = studyDataFrame["age"]
+listGender = studyDataFrame["sex"]
+listBmi = studyDataFrame["bmi"]
+listChildren = studyDataFrame["children"]
+listSmoker = studyDataFrame["smoker"]
+listRegion = studyDataFrame["region"]
+listCharges = studyDataFrame["charges"]
 
 
 #Defining Main method, will be used as MainMenu
 def Main():
     print("U.S. Medical Insurance Data Centre")
     print("1 - Age functions")
-    print("2 - Sex functions")
+    print("2 - Gender functions")
     print("3 - Bmi functions")
     print("4 - Children functions")
     print("5 - Smoker functions")
@@ -43,7 +31,7 @@ def Main():
     if choice == 1:
         Age()
     elif choice == 2:
-        Sex()
+        Gender()
     elif choice == 3:
         Bmi()
     elif choice == 4:
@@ -65,12 +53,12 @@ def Age():
     print("3 - Back to Main")
     choice = int(input("Select option: "))
     if choice == 1:
-        avgAge = sum(listAge) / len(listAge)
-        print(f"Average age of this study is {avgAge}...")
+        avgAge = studyDataFrame["age"].mean()
+        print(f"Average age of this study is {round(avgAge,2)}...")
         Age()
     elif choice == 2:
         selectedAge = int(input("Input age: "))
-        countAge = listAge.count(selectedAge)
+        countAge = studyDataFrame["age"].value_counts().get(selectedAge, 0)
         if countAge > 0:
             print(f"The chosen age of {selectedAge} appears {countAge} times in our study...")
         else:
@@ -82,48 +70,42 @@ def Age():
         print("Not available option")
         Age()
 
-def Sex():
+def Gender():
     print("--------------------")
-    print("1 - Check Sex count")
+    print("1 - Check Gender count")
     print("2 - Back to Main")
     choice = int(input("Select option: "))
     if choice == 1:
-        maleCount = listSex.count("male")
-        femaleCount = listSex.count("female")
-        print(f"There are {maleCount} number of males & {femaleCount} females in our study so far...")
-        Sex()
+        gender_counts = studyDataFrame["sex"].value_counts()
+        print(f"There are {gender_counts.get('male', 0)} males & {gender_counts.get('female', 0)} females in our study so far...")
+        Gender()
     elif choice == 2:
         Main()
     else:
         print("Not available option")
-        Sex()
+        Gender()
+
 
 def Bmi():
     print("--------------------")
-    print("1 - Check average BMI count")
+    print("1 - Check average BMI")
     print("2 - Check count of over/under BMI Index")
     print("3 - Back to Main")
     choice = int(input("Select option: "))
     if choice == 1:
-        avgBmi = sum(listBmi) / len(listBmi)
-        print(f"Average BMI  of this study is {avgBmi}...")
+        avgBmi = studyDataFrame["bmi"].mean()
+        print(f"Average BMI of this study is {round(avgBmi,2)}...")
         Bmi()
     elif choice == 2:
         choiceI = input("Under/Over: ").lower()
         if choiceI == "under":
             under = float(input("Enter BMI Index: "))
-            count = 0
-            for bmi in listBmi:
-                if bmi <= under:
-                    count += 1
+            count = (studyDataFrame["bmi"] <= under).sum()
             print(f"In our study we have {count} cases with BMI under or equal to {under}")
             Bmi()
         elif choiceI == "over":
             over = float(input("Enter BMI Index: "))
-            count = 0
-            for bmi in listBmi:
-                if bmi >= over:
-                    count += 1
+            count = (studyDataFrame["bmi"] >= over).sum()
             print(f"In our study we have {count} cases with BMI over or equal to {over}")
             Bmi()
         else:
@@ -135,6 +117,7 @@ def Bmi():
         print("Not available option")
         Bmi()
 
+
 def Children():
     print("--------------------")
     print("1 - Average num of children")
@@ -142,16 +125,16 @@ def Children():
     print("3 - Back to Main")
     choice = int(input("Select option: "))
     if choice == 1:
-        avgChilds = sum(listChildren) / len(listChildren)
-        print(f"Average age of this study is {avgChilds}...")
+        avgChilds = studyDataFrame["children"].mean()
+        print(f"Average number of children in this study is {round(avgChilds,2)}...")
         Children()
     elif choice == 2:
         selectedCount = int(input("Input number of children: "))
-        countChilds = listChildren.count(selectedCount)
+        countChilds = studyDataFrame["children"].value_counts().get(selectedCount, 0)
         if countChilds > 0:
-            print(f"The chosen age of {selectedCount} appears {countChilds} times in our study...")
+            print(f"The chosen number of children ({selectedCount}) appears {countChilds} times in our study...")
         else:
-            print("This number of Children doesn't appear in our study!")
+            print("This number of children doesn't appear in our study!")
         Children()
     elif choice == 3:
         Main()
@@ -165,9 +148,8 @@ def Smoker():
     print("2 - Back to Main")
     choice = int(input("Select option: "))
     if choice == 1:
-        noSmoking = listSmoker.count("no")
-        yesSmoking = listSmoker.count("yes")
-        print(f"There are {noSmoking} number of non-smokers & {yesSmoking} smokers in our study so far...")
+        smoker_counts = studyDataFrame["smoker"].value_counts()
+        print(f"There are {smoker_counts.get('no', 0)} non-smokers & {smoker_counts.get('yes', 0)} smokers in our study so far...")
         Smoker()
     elif choice == 2:
         Main()
@@ -175,26 +157,23 @@ def Smoker():
         print("Not available option")
         Smoker()
 
+
 def Region():
     print("--------------------")
     print("1 - Check Region count")
     print("2 - Back to Main")
     choice = int(input("Select option: "))
     if choice == 1:
-        southwest = listRegion.count("southwest")
-        southeast = listRegion.count("southeast")
-        northwest = listRegion.count("northwest")
-        northeast = listRegion.count("northeast")
-        print(f"There are {southwest} number of people living in southwest")
-        print(f"There are {southeast} number of people living in southeast")
-        print(f"There are {northwest} number of people living in northwest")
-        print(f"There are {northeast} number of people living in northeast")
+        region_counts = studyDataFrame["region"].value_counts()
+        for region, count in region_counts.items():
+            print(f"There are {count} people living in {region} region")
         Region()
     elif choice == 2:
         Main()
     else:
         print("Not available option")
         Region()
+
 
 def Charges():
     print("--------------------")
@@ -203,36 +182,30 @@ def Charges():
     print("3 - Back to Main")
     choice = int(input("Select option: "))
     if choice == 1:
-        avgCharge = sum(listCharges) / len(listCharges)
-        print(f"Average BMI  of this study is {avgCharge}...")
+        avgCharge = studyDataFrame["charges"].mean()
+        print(f"Average charge of this study is {round(avgCharge,2)}...")
         Charges()
     elif choice == 2:
         choiceI = input("Under/Over: ").lower()
         if choiceI == "under":
             under = float(input("Enter any amount of charge: "))
-            count = 0
-            for charges in listCharges:
-                if charges <= under:
-                    count += 1
+            count = (studyDataFrame["charges"] <= under).sum()
             print(f"In our study we have {count} cases with charges under or equal to {under}")
             Charges()
         elif choiceI == "over":
-            over = float(input("Enter BMI Index: "))
-            count = 0
-            for charges in listCharges:
-                if charges >= over:
-                    count += 1
+            over = float(input("Enter charge amount: "))
+            count = (studyDataFrame["charges"] >= over).sum()
             print(f"In our study we have {count} cases with charges over or equal to {over}")
             Charges()
         else:
             print("Not available option")
             Charges()
-
     elif choice == 3:
         Main()
     else:
         print("Not available option")
         Charges()
+
 
 
 #Adding cross columns functions here
@@ -241,113 +214,22 @@ def Additional():
     print("1 - Average charge for different genders")
     print("2 - Gender/Smoking ratio")
     print("3 - Average charge for a region")
-    print("4 - Back to Main - MORE OPTIONS SOON")
+    print("4 - Back to Main")
     choice = int(input("Select option: "))
     if choice == 1:
-        countSex = 0
-        sumFemale = 0
-        sumMale = 0;
-        sumCharge = 0
-        for person in listSex:
-            if listSex[countSex] == "male":
-                sumCharge += listCharges[countSex]
-                countSex += 1
-                sumMale += 1
-            else:
-                countSex += 1
-        print(f"Average charge for Males is {sumCharge / sumMale}")
-        countSex = 0
-        sumCharge = 0
-        for person in listSex:
-            if listSex[countSex] == "female":
-                sumCharge += listCharges[countSex]
-                countSex += 1
-                sumFemale += 1
-            else:
-                countSex += 1
-        print(f"Average charge for Females is {sumCharge / sumFemale}")
+        gender_avg_charges = studyDataFrame.groupby("sex")["charges"].mean()
+        print(f"Average charge for Males: {round(gender_avg_charges.get('male', 0),2)}")
+        print(f"Average charge for Females: {round(gender_avg_charges.get('female', 0),2)}")
         Additional()
     elif choice == 2:
-        countSex = 0
-        sumSmoke = 0
-        sumMale = 0
-        sumFemale = 0
-        for person in listSex:
-            if listSex[countSex] == "male":
-                if listSmoker[countSex] == "yes":
-                    sumSmoke += 1
-                    countSex += 1
-                    sumMale += 1
-                else:
-                    countSex += 1
-                    sumMale += 1
-            else:
-                countSex += 1
-        print(f"{sumSmoke} males smoke from {sumMale} males in this study")
-        countSex = 0
-        sumSmoke = 0
-        for person in listSex:
-            if listSex[countSex] == "female":
-                if listSmoker[countSex] == "yes":
-                    sumSmoke += 1
-                    countSex += 1
-                    sumFemale += 1
-                else:
-                    countSex += 1
-                    sumFemale += 1
-            else:
-                countSex += 1
-        print(f"{sumSmoke} females smoke from {sumFemale} females in this study")
+        gender_smoker_ratio = studyDataFrame.groupby("sex")["smoker"].value_counts(normalize=True).unstack(fill_value=0)
+        print(f"Gender/Smoking ratio:\n{gender_smoker_ratio}")
         Additional()
     elif choice == 3:
-        countRegion = 0
-        sumRegion = 0
-        sumCharge = 0
-        for region in listRegion:
-            if listRegion[countRegion] == "southwest":
-                sumRegion += 1
-                sumCharge += listCharges[countRegion]
-                countRegion += 1
-            else:
-                countRegion += 1
-        print(f"Average charge for SOUTHWEST region is {sumCharge / sumRegion}")
-        countRegion = 0
-        sumRegion = 0
-        sumCharge = 0
-        for region in listRegion:
-            if listRegion[countRegion] == "southeast":
-                sumRegion += 1
-                sumCharge += listCharges[countRegion]
-                countRegion += 1
-            else:
-                countRegion += 1
-        print(f"Average charge for SOUTHEAST region is {sumCharge / sumRegion}")
-        countRegion = 0
-        sumRegion = 0
-        sumCharge = 0
-        for region in listRegion:
-            if listRegion[countRegion] == "northwest":
-                sumRegion += 1
-                sumCharge += listCharges[countRegion]
-                countRegion += 1
-            else:
-                countRegion += 1
-        print(f"Average charge for NORTHWEST region is {sumCharge / sumRegion}")
-        countRegion = 0
-        sumRegion = 0
-        sumCharge = 0
-        for region in listRegion:
-            if listRegion[countRegion] == "northeast":
-                sumRegion += 1
-                sumCharge += listCharges[countRegion]
-                countRegion += 1
-            else:
-                countRegion += 1
-        print(f"Average charge for NORTHEAST region is {sumCharge / sumRegion}")
-        countRegion = 0
-        sumRegion = 0
-        sumCharge = 0
-
+        region_avg_charges = studyDataFrame.groupby("region")["charges"].mean()
+        for region, charge in region_avg_charges.items():
+            print(f"Average charge for {region} region: {round(charge,2)}")
+        Additional()
     elif choice == 4:
         Main()
     else:
