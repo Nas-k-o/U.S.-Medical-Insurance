@@ -1,20 +1,44 @@
-#I'll be using CSV for this project
-import csv
-from itertools import count
-from logging.config import listen
-from pickle import FLOAT
 import pandas as pd
 
 studyDataFrame = pd.read_csv("insurance.csv")
 
-listAge = studyDataFrame["age"]
-listGender = studyDataFrame["sex"]
-listBmi = studyDataFrame["bmi"]
-listChildren = studyDataFrame["children"]
-listSmoker = studyDataFrame["smoker"]
-listRegion = studyDataFrame["region"]
-listCharges = studyDataFrame["charges"]
+def User():
+    print("U.S. Medical Insurance Data Centre")
+    print("--------------------")
+    print("1 - Calculate your insurance cost")
+    print("2 - Check U.S. Medical Insurance stats from our study")
+    choice = int(input("Select option: "))
+    if choice == 1:
+        age = int(input("Input age:"))
+        gender = input("Input gender:")
+        g_cost = 0
+        if gender.lower() == "male":
+            g_cost = 1
+        bmi = float(input("Input BMI index:"))
+        n_children = int(input("Input num of children:"))
+        region = input("Region:")
+        s_cost = 0
+        smoker = input("You smoke? no/yes:")
+        if smoker.lower() == "yes":
+            s_cost = 1
+        cost = 250*age - 128*g_cost + 370*bmi + 425*n_children + 24000*s_cost - 12500
+        print(f"Your insurance is estimated at {cost}$")
+        saveToCsv = {
+            "age": age,
+            "sex": gender,
+            "bmi": bmi,
+            "children": n_children,
+            "smoker": smoker,
+            "region": region,
+            "charges": cost
+        }
 
+        pd.DataFrame([saveToCsv]).to_csv("userInsurance.csv", index = False)
+        Main()
+    elif choice == 2:
+        Main()
+
+userDataFrame = pd.read_csv("userInsurance.csv")
 
 #Defining Main method, will be used as MainMenu
 def Main():
@@ -26,7 +50,7 @@ def Main():
     print("5 - Smoker functions")
     print("6 - Region functions")
     print("7 - Charges functions")
-    print("8 - Cross column functions")
+    print("8 - Compare your data to data of participants in our study")
     choice = int(input("Select option from the ones above: "))
     if choice == 1:
         Age()
@@ -55,6 +79,7 @@ def Age():
     if choice == 1:
         avgAge = studyDataFrame["age"].mean()
         print(f"Average age of this study is {round(avgAge,2)}...")
+        print(f"Your age is {userDataFrame.age[0]}")
         Age()
     elif choice == 2:
         selectedAge = int(input("Input age: "))
@@ -211,59 +236,36 @@ def Charges():
 #Adding cross columns functions here
 def Additional():
     print("--------------------")
-    print("1 - Average charge for different genders")
-    print("2 - Gender/Smoking ratio")
+    print("1 - Check average for your region")
+    print("2 - Check average for your gender")
     print("3 - Average charge for a region")
     print("4 - Back to Main")
     choice = int(input("Select option: "))
     if choice == 1:
-        gender_avg_charges = studyDataFrame.groupby("sex")["charges"].mean()
-        print(f"Average charge for Males: {round(gender_avg_charges.get('male', 0),2)}")
-        print(f"Average charge for Females: {round(gender_avg_charges.get('female', 0),2)}")
+        avgRegion = studyDataFrame.groupby("region").charges.mean()
+        print(f"Your charge is {userDataFrame.charges[0]}")
+        if userDataFrame.region[0] == "northwest":
+            print(f"The average for the NORTHWEST region is {round(avgRegion["northwest"],2)}")
+        elif userDataFrame.region[0] == "northeast":
+            print(f"The average for the NORTHWEST region is {round(avgRegion["northeast"], 2)}")
+        elif userDataFrame.region[0] == "southwest":
+            print(f"The average for the NORTHWEST region is {round(avgRegion["southwest"], 2)}")
+        elif userDataFrame.region[0] == "southeast":
+            print(f"The average for the NORTHWEST region is {round(avgRegion["southeast"], 2)}")
         Additional()
     elif choice == 2:
-        gender_smoker_ratio = studyDataFrame.groupby("sex")["smoker"].value_counts(normalize=True).unstack(fill_value=0)
-        print(f"Gender/Smoking ratio:\n{gender_smoker_ratio}")
-        Additional()
-    elif choice == 3:
-        region_avg_charges = studyDataFrame.groupby("region")["charges"].mean()
-        for region, charge in region_avg_charges.items():
-            print(f"Average charge for {region} region: {round(charge,2)}")
-        Additional()
-    elif choice == 4:
-        Main()
-    else:
-        print("Invalid option")
-        Additional()
+        genderCount = studyDataFrame.groupby("sex").charges.mean()
+        if userDataFrame.sex[0] == "female":
+            print(f"The average charge for the females is {round(genderCount["female"],2)}")
+        elif userDataFrame.sex[0] == "male":
+            print(f"The average charge for the males is {round(genderCount["male"], 2)}")
 
-def User():
-    age = int(input("Input age:"))
-    gender = input("Input gender:")
-    g_cost = 0
-    if gender.lower() == "male":
-        g_cost = 1
-    bmi = float(input("Input BMI index:"))
-    n_children = int(input("Input num of children:"))
-    region = input("Region:")
-    s_cost = 0
-    smoker = input("You smoke? no/yes:")
-    if smoker.lower() == "yes":
-        s_cost = 1
-    cost = 250*age - 128*g_cost + 370*bmi + 425*n_children + 24000*s_cost - 12500
-    print(f"Your insurance is estimated at {cost}$")
-    userDataFrame = {
-        "age": age,
-        "sex": gender,
-        "bmi": bmi,
-        "children": n_children,
-        "smoker": smoker,
-        "region": region,
-        "charges": cost
-    }
 
-    pd.DataFrame([userDataFrame]).to_csv("userInsurance.csv", index = False)
-
-    Main()
 
 User()
 
+
+#northeast - 1
+#northwest - 2
+#southeast - 3
+#southwest - 4
