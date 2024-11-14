@@ -236,6 +236,34 @@ def Additional():
         print("Invalid option")
         Additional()
 
+def User():
+    age = int(input("Input age:"))
+    gender = input("Input gender:")
+    g_cost = 0
+    if gender.lower() == "male":
+        g_cost = 1
+    bmi = float(input("Input BMI index:"))
+    n_children = int(input("Input num of children:"))
+    region = input("Region:")
+    s_cost = 0
+    smoker = input("You smoke? no/yes:")
+    if smoker.lower() == "yes":
+        s_cost = 1
+    cost = 250*age - 128*g_cost + 370*bmi + 425*n_children + 24000*s_cost - 12500
+    print(f"Your insurance is estimated at {cost}$")
+    userDataFrame = {
+        "age": age,
+        "sex": gender,
+        "bmi": bmi,
+        "children": n_children,
+        "smoker": smoker,
+        "region": region,
+        "charges": cost
+    }
 
-Main()
+    pd.DataFrame([userDataFrame]).to_csv("userInsurance.csv", index = False)
+
+    Main()
+
+User()
 
