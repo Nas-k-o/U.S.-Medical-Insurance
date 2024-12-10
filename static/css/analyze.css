@@ -1,0 +1,95 @@
+/* General body and layout settings */
+body {
+    background-color: #10162f; /* Dark purple background */
+    color: #66c4ff; /* Light blue text color */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header style */
+h1, h2 {
+    text-align: center;
+    color: #66c4ff;
+    font-size: 2em;
+}
+
+/* Buttons for user input actions */
+button {
+    background-color: #3b4a6f; /* Slightly lighter purple */
+    color: #66c4ff; /* Light blue text */
+    border: 2px solid #66c4ff; /* Blue border */
+    padding: 12px 20px;
+    margin: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s ease;
+}
+
+button:hover {
+    background-color: #66c4ff; /* Light blue background on hover */
+    color: #10162f; /* Dark purple text on hover */
+    transform: scale(1.05); /* Slight zoom effect on hover */
+}
+
+/* Table styling for comparison results */
+table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid #66c4ff;
+    padding: 12px;
+}
+
+th, td {
+    text-align: center;
+}
+
+th {
+    background-color: #3b4a6f; /* Darker purple for header */
+    color: #66c4ff;
+}
+
+td {
+    background-color: #1c2a46; /* Slightly lighter dark purple for rows */
+}
+
+/* Form styling */
+form {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+form button {
+    width: 150px;
+    margin: 5px;
+}
+
+/* Error message styling */
+.error-message {
+    color: #ff5c8d; /* Pinkish color for errors */
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* General layout tweaks for spacing and alignment */
+.container {
+    width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #1c2a46;
+    border-radius: 10px;
+}
+
+/* Section headers within the content */
+section h3 {
+    color: #66c4ff;
+    font-size: 1.8em;
+    text-align: center;
+    margin-bottom: 10px;
+}
