@@ -42,7 +42,7 @@ def user():
         }
 
         # Append user data to CSV (you can also save to a database if needed)
-        pd.DataFrame([saveToCsv]).to_csv("userInsurance.csv", mode='a', header=False, index=False)
+        pd.DataFrame([saveToCsv]).to_csv("userInsurance.csv", index = False)
 
         return render_template("user_input.html", cost=cost)
     return render_template("user_input.html")
