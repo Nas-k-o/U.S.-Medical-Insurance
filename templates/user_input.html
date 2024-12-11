@@ -3,39 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Insurance Cost Calculation</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='user.css') }}">
+    <title>User Input</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/user.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>Calculate Your Insurance Cost</h1>
-        <form action="/user" method="POST">
+        <h1>Insurance Calculator</h1>
+        <h2>Please enter your details</h2>
+        <form method="POST">
             <label for="age">Age:</label>
-            <input type="number" id="age" name="age" required><br><br>
+            <input type="number" id="age" name="age" required>
 
-            <label for="gender">Gender (male/female):</label>
-            <input type="text" id="gender" name="gender" required><br><br>
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender" required>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
 
             <label for="bmi">BMI:</label>
-            <input type="number" step="0.1" id="bmi" name="bmi" required><br><br>
+            <input type="number" id="bmi" name="bmi" step="0.1" required>
 
-            <label for="children">Number of Children:</label>
-            <input type="number" id="children" name="children" required><br><br>
+            <label for="children">Number of children:</label>
+            <input type="number" id="children" name="children" required>
 
             <label for="region">Region:</label>
-            <input type="text" id="region" name="region" required><br><br>
+            <select id="region" name="region" required>
+                <option value="northeast">Northeast</option>
+                <option value="southeast">Southeast</option>
+                <option value="southwest">Southwest</option>
+                <option value="northwest">Northwest</option>
+            </select>
 
-            <label for="smoker">Do you smoke? (yes/no):</label>
-            <input type="text" id="smoker" name="smoker" required><br><br>
+            <label for="smoker">Are you a smoker?</label>
+            <select id="smoker" name="smoker" required>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
 
-            <button type="submit">Submit</button>
+            <button type="submit"><a href="{{ url_for('main') }}">Calculate Insurance</a></button>
         </form>
 
-        {% if cost is not none %}
-        <div class="result">
-            <h2>Insurance Cost Calculation Result</h2>
-            <p>Your estimated insurance cost is: <strong>${{ cost }}</strong></p>
-        </div>
+        {% if error %}
+            <div class="error-message">{{ error }}</div>
         {% endif %}
     </div>
 </body>
