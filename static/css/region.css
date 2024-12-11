@@ -108,3 +108,26 @@ button a {
     text-decoration: none;
 }
 
+/* Styling for the download button */
+.download-button {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.download-button .button-36 {
+    background-color: #66c4ff; /* Light blue background for buttons */
+    color: #10162f; /* Dark purple text color */
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s ease;
+}
+
+.download-button .button-36:hover {
+    background-color: #3b4a6f; /* Lighter purple background on hover */
+    transform: scale(1.05); /* Slight zoom effect */
+}
+
+

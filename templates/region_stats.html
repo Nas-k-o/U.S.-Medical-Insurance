@@ -41,5 +41,13 @@
             </tbody>
         </table>
     {% endif %}
+
+    <!-- Add this to your region_stats.html -->
+<div class="download-button">
+    <form action="/download_region_stats" method="get">
+        <button type="submit" class="button-36">Download Region Stats (CSV)</button>
+    </form>
+</div>
+
 </body>
 </html>

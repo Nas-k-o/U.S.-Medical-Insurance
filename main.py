@@ -1,5 +1,10 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_file
 import pandas as pd
+import matplotlib.pyplot as plt
+import zipfile
+import os
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+
 # Initialize Flask app
 app = Flask(__name__)
 
@@ -129,6 +134,47 @@ def region_stats():
         context["region_data"] = region_data.to_dict(orient='records')
 
     return render_template("region_stats.html", **context)
+
+
+@app.route('/download_region_stats', methods=["GET"])
+def download_region_stats():
+    # Calculate statistics for each region
+    region_data = studyDataFrame.groupby('region').agg(
+        avg_age=('age', 'mean'),
+        avg_bmi=('bmi', 'mean'),
+        avg_children=('children', 'mean'),
+        avg_charges=('charges', 'mean'),
+        smoker_count=('smoker', lambda x: (x == 'yes').sum()),
+        non_smoker_count=('smoker', lambda x: (x == 'no').sum())
+    ).reset_index()
+
+    # Save the region data to a CSV file
+    csv_path = 'region_stats.csv'
+    region_data.to_csv(csv_path, index=False)
+
+    # Generate a graph (e.g., bar chart for average charges per region)
+    plt.figure(figsize=(10, 6))
+    plt.bar(region_data['region'], region_data['avg_charges'], color='skyblue')
+    plt.title('Average Charges per Region')
+    plt.xlabel('Region')
+    plt.ylabel('Average Charges')
+
+    # Save the graph as an image
+    image_path = 'region_stats_graph.png'
+    plt.savefig(image_path)
+
+    # Create a ZIP file containing both the CSV and the image
+    zip_path = 'region_stats.zip'
+    with zipfile.ZipFile(zip_path, 'w') as zipf:
+        zipf.write(csv_path)
+        zipf.write(image_path)
+
+    # Remove the temporary files after adding them to the ZIP
+    os.remove(csv_path)
+    os.remove(image_path)
+
+    # Send the ZIP file as a downloadable attachment
+    return send_file(zip_path, as_attachment=True, download_name="region_stats.zip", mimetype='application/zip')
 
 if __name__ == '__main__':
     app.run(debug=True)
