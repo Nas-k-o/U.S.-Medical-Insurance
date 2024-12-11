@@ -1,35 +1,40 @@
 /* General body and layout settings */
 body {
-    background-color: #10162f; /* Dark purple background */
     color: #66c4ff; /* Light blue text color */
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    animation: fadeIn 2s ease;
 }
 
 /* Header style */
 h1, h2 {
     text-align: center;
     color: #66c4ff;
-    font-size: 2em;
+    font-size: 2.5em;
+    margin-top: 20px;
+    animation: slideDown 1.5s ease;
 }
 
 /* Buttons for user input actions */
 button {
-    background-color: #3b4a6f; /* Slightly lighter purple */
-    color: #66c4ff; /* Light blue text */
-    border: 2px solid #66c4ff; /* Blue border */
+
+    color: #10162f; /* Dark text */
+    border: none;
     padding: 12px 20px;
     margin: 10px;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s ease;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 button:hover {
-    background-color: #66c4ff; /* Light blue background on hover */
-    color: #10162f; /* Dark purple text on hover */
-    transform: scale(1.05); /* Slight zoom effect on hover */
+
+    transform: scale(1.1);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
 }
 
 /* Table styling for comparison results */
@@ -37,6 +42,7 @@ table {
     width: 80%;
     margin: 20px auto;
     border-collapse: collapse;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 table, th, td {
@@ -44,17 +50,20 @@ table, th, td {
     padding: 12px;
 }
 
-th, td {
-    text-align: center;
-}
-
 th {
-    background-color: #3b4a6f; /* Darker purple for header */
+
     color: #66c4ff;
+    font-size: 1.2em;
 }
 
 td {
     background-color: #1c2a46; /* Slightly lighter dark purple for rows */
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+table tr:hover td {
+    background-color: #3a4b6f;
 }
 
 /* Form styling */
@@ -66,7 +75,7 @@ form {
 }
 
 form button {
-    width: 150px;
+    width: 160px;
     margin: 5px;
 }
 
@@ -75,15 +84,8 @@ form button {
     color: #ff5c8d; /* Pinkish color for errors */
     text-align: center;
     margin-top: 20px;
-}
-
-/* General layout tweaks for spacing and alignment */
-.container {
-    width: 80%;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #1c2a46;
-    border-radius: 10px;
+    font-size: 1.2em;
+    animation: fadeIn 1s ease-in;
 }
 
 /* Section headers within the content */

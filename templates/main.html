@@ -5,87 +5,194 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/analyze.css') }}">
     <title>Insurance Analysis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #10162f, #2a3b5f);
+            color: #66c4ff;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin: 20px 0;
+            animation: fadeIn 2s ease;
+        }
+
+        form {
+            margin: 20px auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        button {
+            background-color: #66c4ff;
+            color: #10162f;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.3s;
+        }
+
+        button:hover {
+            transform: scale(1.1);
+            background-color: #52a1e0;
+        }
+
+        hr {
+            border: 1px solid #66c4ff;
+            margin: 20px auto;
+            width: 80%;
+        }
+
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+
+        table th, table td {
+            border: 1px solid #66c4ff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        table th {
+            background-color: #66c4ff;
+            color: #10162f;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #2a3b5f;
+        }
+
+        table tr:hover {
+            background-color: #3a4b6f;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        ul li {
+            background-color: #2a3b5f;
+            margin: 10px auto;
+            padding: 10px;
+            width: 60%;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+
+        ul li:hover {
+            background-color: #3a4b6f;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
 <body>
     <h1>Insurance Analysis Tool</h1>
-
     <form method="POST" action="/main">
-    <button name="age">Average Age</button>
-    <button name="gender">Gender Distribution</button>
-    <button name="bmi">Average BMI</button>
-    <button name="children">Average Children</button>
-    <button name="smoker">Smoker vs Non-Smoker</button>
-    <button name="region">Region Analysis</button>
-    <button name="charges">Average Charges</button>
-    <button name="compare">Compare User Data</button>
-</form>
-
-<hr>
-
-{% if view == "age" %}
-    <h2>Average Age</h2>
-    <p>The average age in the dataset is: {{ avg_age }}</p>
-{% elif view == "gender" %}
-    <h2>Gender Distribution</h2>
-    <p>Male: {{ male }} | Female: {{ female }}</p>
-{% elif view == "bmi" %}
-    <h2>Average BMI</h2>
-    <p>The average BMI in the dataset is: {{ avg_bmi }}</p>
-{% elif view == "children" %}
-    <h2>Average Number of Children</h2>
-    <p>The average number of children in the dataset is: {{ avg_children }}</p>
-{% elif view == "smoker" %}
-    <h2>Smoker vs Non-Smoker</h2>
-    <p>Smokers: {{ smoker }} | Non-Smokers: {{ non_smoker }}</p>
-{% elif view == "region" %}
-    <h2>Region Analysis</h2>
-    <ul>
-        {% for region, count in region_counts.items() %}
-            <li>{{ region }}: {{ count }}</li>
-        {% endfor %}
-    </ul>
-{% elif view == "charges" %}
-    <h2>Average Charges</h2>
-    <p>The average charges in the dataset are: ${{ avg_charge }}</p>
-{% elif view == "compare" %}
-    <h2>Comparison Results</h2>
-    {% if comparison_data %}
-        <table border="1">
-            <tr>
-                <th>Attribute</th>
-                <th>User Value</th>
-                <th>Average Value</th>
-                <th>Difference</th>
-            </tr>
-            <tr>
-                <td>Age</td>
-                <td>{{ comparison_data['User Age'] }}</td>
-                <td>{{ comparison_data['Average Age'] }}</td>
-                <td>{{ comparison_data['User Age'] - comparison_data['Average Age'] }}</td>
-            </tr>
-            <tr>
-                <td>BMI</td>
-                <td>{{ comparison_data['User BMI'] }}</td>
-                <td>{{ comparison_data['Average BMI'] }}</td>
-                <td>{{ comparison_data['User BMI'] - comparison_data['Average BMI'] }}</td>
-            </tr>
-            <tr>
-                <td>Children</td>
-                <td>{{ comparison_data['User Children'] }}</td>
-                <td>{{ comparison_data['Average Children'] }}</td>
-                <td>{{ comparison_data['User Children'] - comparison_data['Average Children'] }}</td>
-            </tr>
-            <tr>
-                <td>Charges</td>
-                <td>${{ comparison_data['User Charges'] }}</td>
-                <td>${{ comparison_data['Average Charges'] }}</td>
-                <td>${{ comparison_data['User Charges'] - comparison_data['Average Charges'] }}</td>
-            </tr>
-        </table>
-    {% else %}
-        <p>{{ error }}</p>
+        <button name="age">Average Age</button>
+        <button name="gender">Gender Distribution</button>
+        <button name="bmi">Average BMI</button>
+        <button name="children">Average Children</button>
+        <button name="smoker">Smoker vs Non-Smoker</button>
+        <button name="region">Region Analysis</button>
+        <button name="charges">Average Charges</button>
+        <button name="compare">Compare User Data</button>
+    </form>
+    <hr>
+    {% if view == "age" %}
+        <h2>Average Age</h2>
+        <p>The average age in the dataset is: {{ avg_age }}</p>
+        <h2>Fun fact</h2>
+        <p>The median age in the U.S. is around 38 years old, which means half of Americans are older than 38, and half are younger. But here's the kicker: if you think you're "middle-aged" at 38, remember—you might actually be just getting started! In 1900, the average life expectancy in the U.S. was just 47 years. So, congratulations to today's 38-year-olds, who are living in a time where they’re still considered "young" compared to their great-grandparents!
+            Also, if you're in your 40s or 50s, it’s a great time to claim you're "still a kid" in the grand scheme of things!</p>
+    {% elif view == "gender" %}
+        <h2>Gender Distribution</h2>
+        <p>Male: {{ male }} | Female: {{ female }}</p>
+        <h2>Fun fact</h2>
+        <p>Did you know that there are slightly more women than men in the U.S.? In fact, women make up about 51% of the population, while men make up about 49%. So, if you're ever feeling outnumbered in a group of people, just remember: statistically speaking, the ladies are winning—just by a little bit!
+            It’s almost like the universe's way of making sure that every "man cave" has at least one "woman’s touch" to balance it out!</p>
+    {% elif view == "bmi" %}
+        <h2>Average BMI</h2>
+        <p>The average BMI in the dataset is: {{ avg_bmi }}</p>
+        <h2>Fun fact</h2>
+        <p>The average BMI in the U.S. is 29.0, which puts the average American in the "overweight" category. So technically, if you're feeling a bit round, you're just “on trend”! In fact, the average BMI could probably start its own fitness program called “The Couch Potato Challenge”—it encourages a little bit of snacking, a little bit of napping, and a lot of being just a smidge heavier than ideal. You know, for "health" reasons.</p>
+    {% elif view == "children" %}
+        <h2>Average Number of Children</h2>
+        <p>The average number of children in the dataset is: {{ avg_children }}</p>
+        <h2>Fun fact</h2>
+        <p>The average number of children per family in the U.S. is about 1.9. So technically, the "average family" has just shy of two kids, which means there’s always that one parent who’s like, "We almost had a full set!" It's like a family version of "the sequel that never quite happened." Also, if you're one of the lucky ones with just one child, you're officially a "family of almost two"—but hey, you’ve got a built-in excuse for not needing to buy a second set of everything!</p>
+    {% elif view == "smoker" %}
+        <h2>Smoker vs Non-Smoker</h2>
+        <p>Smokers: {{ smoker }} | Non-Smokers: {{ non_smoker }}</p>
+    {% elif view == "region" %}
+        <h2>Region Analysis</h2>
+        <ul>
+            {% for region, count in region_counts.items() %}
+                <li><a href="{{ url_for('region_stats') }}">{{ region }}: {{ count }}</a></li>
+            {% endfor %}
+        </ul>
+    {% elif view == "charges" %}
+        <h2>Average Charges</h2>
+        <p>The average charges in the dataset are: ${{ avg_charge }}</p>
+    {% elif view == "compare" %}
+        <h2>Comparison Results</h2>
+        {% if comparison_data %}
+            <table>
+                <tr>
+                    <th>Attribute</th>
+                    <th>User Value</th>
+                    <th>Average Value</th>
+                    <th>Difference</th>
+                </tr>
+                <tr>
+                    <td>Age</td>
+                    <td>{{ comparison_data['User Age'] }}</td>
+                    <td>{{ comparison_data['Average Age'] }}</td>
+                    <td>{{ comparison_data['User Age'] - comparison_data['Average Age'] }}</td>
+                </tr>
+                <tr>
+                    <td>BMI</td>
+                    <td>{{ comparison_data['User BMI'] }}</td>
+                    <td>{{ comparison_data['Average BMI'] }}</td>
+                    <td>{{ comparison_data['User BMI'] - comparison_data['Average BMI'] }}</td>
+                </tr>
+                <tr>
+                    <td>Children</td>
+                    <td>{{ comparison_data['User Children'] }}</td>
+                    <td>{{ comparison_data['Average Children'] }}</td>
+                    <td>{{ comparison_data['User Children'] - comparison_data['Average Children'] }}</td>
+                </tr>
+                <tr>
+                    <td>Charges</td>
+                    <td>${{ comparison_data['User Charges'] }}</td>
+                    <td>${{ comparison_data['Average Charges'] }}</td>
+                    <td>${{ comparison_data['User Charges'] - comparison_data['Average Charges'] }}</td>
+                </tr>
+            </table>
+        {% else %}
+            <p>{{ error }}</p>
+        {% endif %}
     {% endif %}
-{% endif %}
-
 </body>
 </html>

@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request
 import pandas as pd
-
 # Initialize Flask app
 app = Flask(__name__)
 
@@ -46,90 +45,7 @@ def user():
 
         return render_template("user_input.html", cost=cost)
     return render_template("user_input.html")
-"""
-@app.route('/main')
-def main():
-    return render_template("main.html")
 
-@app.route('/age')
-def age():
-    avg_age = studyDataFrame["age"].mean()
-    return render_template("age.html", avg_age=round(avg_age, 2))
-
-@app.route('/gender')
-def gender():
-    gender_counts = studyDataFrame["sex"].value_counts()
-    male = gender_counts.get('male', 0)
-    female = gender_counts.get('female', 0)
-    return render_template("gender.html", male=male, female=female)
-
-@app.route('/bmi')
-def bmi():
-    avg_bmi = studyDataFrame["bmi"].mean()
-    return render_template("bmi.html", avg_bmi=round(avg_bmi, 2))
-
-@app.route('/children')
-def children():
-    avg_children = studyDataFrame["children"].mean()
-    return render_template("children.html", avg_children=round(avg_children, 2))
-
-@app.route('/smoker')
-def smoker():
-    smoker_counts = studyDataFrame["smoker"].value_counts()
-    non_smoker = smoker_counts.get('no', 0)
-    smoker_count = smoker_counts.get('yes', 0)
-    return render_template("smoker.html", non_smoker=non_smoker, smoker=smoker_count)
-
-@app.route('/region')
-def region():
-    region_counts = studyDataFrame["region"].value_counts()
-    return render_template("region.html", region_counts=region_counts)
-
-@app.route('/charges')
-def charges():
-    avg_charge = studyDataFrame["charges"].mean()
-    return render_template("charges.html", avg_charge=round(avg_charge, 2))
-
-@app.route('/additional', methods=["GET", "POST"])
-def additional():
-    if request.method == "POST":
-        choice = int(request.form['choice'])
-        if choice == 1:
-            # Calculate average charge for the region of the user
-            avgRegion = studyDataFrame.groupby("region").charges.mean()
-            user_region = userDataFrame.region[0]
-            avg = avgRegion.get(user_region, 0)
-            return render_template("additional.html", region_avg=round(avg, 2))
-        elif choice == 2:
-            # Calculate average charge for the user's gender
-            gender_count = studyDataFrame.groupby("sex").charges.mean()
-            user_gender = userDataFrame.sex[0]
-            avg = gender_count.get(user_gender, 0)
-            return render_template("additional.html", gender_avg=round(avg, 2))
-        elif choice == 3:
-            # Calculate average charge for a region (user can input region)
-            selected_region = request.form['region']
-            avg_charge = studyDataFrame[studyDataFrame["region"] == selected_region]["charges"].mean()
-            return render_template("additional.html", region_avg=round(avg_charge, 2))
-        else:
-            return render_template("additional.html", error="Invalid choice")
-    return render_template("additional.html")
-
-@app.route('/compare')
-def compare():
-    # Here we assume you would want to compare the user's data to the study data
-    user_data = userDataFrame.iloc[0]
-    comparison_data = {
-        "Age": user_data['age'],
-        "Gender": user_data['sex'],
-        "BMI": user_data['bmi'],
-        "Children": user_data['children'],
-        "Smoker": user_data['smoker'],
-        "Region": user_data['region'],
-        "Charges": user_data['charges']
-    }
-    return render_template("compare.html", comparison_data=comparison_data)
-"""
 @app.route('/main', methods=["GET", "POST"])
 def main():
     context = {"view": None}  # Default view
@@ -188,6 +104,25 @@ def main():
                 context["comparison_error"] = "No user data available for comparison."
 
     return render_template("main.html", **context)
+
+@app.route('/region_stats', methods=["GET", "POST"])
+def region_stats():
+    context = {"view": "region_stats"}
+
+    if request.method == "POST":
+        # Calculate statistics for each region
+        region_data = studyDataFrame.groupby('region').agg(
+            avg_age=('age', 'mean'),
+            avg_bmi=('bmi', 'mean'),
+            avg_children=('children', 'mean'),
+            avg_charges=('charges', 'mean'),
+            smoker_count=('smoker', lambda x: (x == 'yes').sum()),
+            non_smoker_count=('smoker', lambda x: (x == 'no').sum())
+        ).reset_index()
+
+        context["region_data"] = region_data.to_dict(orient='records')
+
+    return render_template("region_stats.html", **context)
 
 if __name__ == '__main__':
     app.run(debug=True)

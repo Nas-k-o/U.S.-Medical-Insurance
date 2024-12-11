@@ -7,7 +7,7 @@ body {
     padding: 0;
 }
 
-/* Header styling */
+/* Header styling for the region stats page */
 .head {
     text-align: center;
     padding: 40px 20px;
@@ -26,45 +26,66 @@ body {
     font-weight: 300;
 }
 
-/* Section for introduction and additional info */
-.intro {
-    text-align: left;
+/* Section for the region statistics table */
+.region-stats {
     margin: 50px auto;
     width: 80%;
-}
-
-.intro h3 {
-    font-size: 2em;
-    margin-bottom: 10px;
-}
-
-.intro p {
-    font-size: 1.2em;
-    line-height: 1.6;
-    margin: 10px 0;
-}
-
-/* Section for actions and buttons */
-.Section {
-    text-align: left;
-    margin: 50px auto;
+    background-color: #1c2a46; /* Dark background for the stats section */
     padding: 20px;
-    width: 80%;
-    background-color: #1c2a46; /* Dark background for sections */
     border-radius: 8px;
 }
 
-.Section h3 {
-    font-size: 2em;
-    margin-bottom: 20px;
+.region-stats h2 {
+    font-size: 2.5em;
+    text-align: center;
+    margin-bottom: 30px;
 }
 
-.Section p {
+/* Table styling */
+.region-stats table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+}
+
+.region-stats th, .region-stats td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #66c4ff;
+}
+
+.region-stats th {
+    background-color: #3b4a6f; /* Slightly lighter purple background for table headers */
+    color: #66c4ff;
     font-size: 1.2em;
-    margin-bottom: 20px;
 }
 
-.intro .button-36 {
+.region-stats td {
+    background-color: #1c2a46;
+    color: #66c4ff;
+    font-size: 1.1em;
+}
+
+.region-stats tr:nth-child(even) {
+    background-color: #2a3d5f; /* Darker row background for even rows */
+}
+
+/* Button styling for the region stats page */
+.region-stats .button-36 {
+    background-color: #66c4ff; /* Light blue background for buttons */
+    color: #10162f; /* Dark purple text color */
+    border: none;
+    padding: 15px 30px;
+    margin: 20px auto;
+    display: block;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 1.2em;
+    transition: background-color 0.3s, transform 0.2s ease;
+    text-align: center;
+}
+
+button {
     background-color: #66c4ff; /* Light blue background for buttons */
     color: #10162f; /* Dark purple text color */
     border: none;
@@ -76,37 +97,14 @@ body {
     transition: background-color 0.3s, transform 0.2s ease;
 }
 
-.intro .button-36:hover {
+button:hover {
     background-color: #3b4a6f; /* Lighter purple background on hover */
     transform: scale(1.05); /* Slight zoom effect */
 }
 
 /* Link inside button to look better */
-.intro .button-36 a {
+button a {
     color: #10162f;
     text-decoration: none;
 }
 
-
-.Section .button-36 {
-    background-color: #66c4ff; /* Light blue background for buttons */
-    color: #10162f; /* Dark purple text color */
-    border: none;
-    padding: 15px 30px;
-    margin: 10px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-size: 1.2em;
-    transition: background-color 0.3s, transform 0.2s ease;
-}
-
-.Section .button-36:hover {
-    background-color: #3b4a6f; /* Lighter purple background on hover */
-    transform: scale(1.05); /* Slight zoom effect */
-}
-
-/* Link inside button to look better */
-.Section .button-36 a {
-    color: #10162f;
-    text-decoration: none;
-}
