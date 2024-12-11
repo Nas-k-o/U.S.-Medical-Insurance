@@ -3,32 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>U.S. Medical Insurance Data Centre</title>
+    <title>More Information</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-
 </head>
 <body>
-        <div class="head">
-            <h1>Welcome to the U.S. Medical Insurance Data Centre</h1> <br>
-            <h2>Empowering You to Make Informed Insurance Decisions</h2>
-
-        </div>
-        <div class="intro">
-            <h3>Did you know?</h3>
-            <p>8% of Americans are uninsured, leaving approximately 26 million people without coverage in 2023</p>
-            <h3>Current Trends and Challenges</h3>
-            <P>Rising Costs and Innovation: Healthcare expenses continue to rise, driven by drug prices, administrative costs, and advanced treatments. Simultaneously, innovations like telemedicine and personalized medicine are reshaping the industry.
-Debates Over Universal Coverage: Proposals such as Medicare-for-All and public options remain contentious, reflecting ongoing debates over the role of government in healthcare.
-COVID-19 Pandemic: The pandemic highlighted disparities in healthcare access and coverage, leading to renewed discussions about equity and reform.</P>
-            <button class="button-36" role="button"><a href="{{ url_for('main') }}">View Study Data</a></button>
-        </div>
-        <div class="Section">
-            <h3>Start Here!</h3>
-            <p>Use our Insurance Cost Calculator </p>
-            <p>Compare your data with data from our study with more than 1300 examples.</p>
-            <button class="button-36" role="button"><a href="{{ url_for('user') }}">Calculate Insurance Cost</a></button>
-            <button class="button-36" role="button"><a href="{{ url_for('main') }}">View Study Data</a></button>
-        </div>
-
+    <div class="head">
+        <h1>More Information on U.S. Medical Insurance</h1>
+    </div>
+    <div class="intro">
+        <h3>Understanding the Data</h3>
+        <p>Here you can find detailed information about medical insurance costs and statistics...</p>
+        <!-- Add more detailed content here as needed -->
+        <button class="button-36" role="button"><a href="{{ url_for('index') }}">Back to Home</a></button>
+    </div>
 </body>
 </html>

@@ -176,5 +176,9 @@ def download_region_stats():
     # Send the ZIP file as a downloadable attachment
     return send_file(zip_path, as_attachment=True, download_name="region_stats.zip", mimetype='application/zip')
 
+@app.route('/info')
+def info():
+    return render_template("info.html")
+
 if __name__ == '__main__':
     app.run(debug=True)
