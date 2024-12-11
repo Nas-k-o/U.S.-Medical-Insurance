@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/region.css') }}">
+    <title>Region Statistics</title>
+</head>
+<body>
+    <h1>Region-Based Statistics</h1>
+    <form method="POST">
+        <button type="submit">Show Region Statistics</button>
+    </form>
+
+    {% if region_data %}
+        <h2>Statistics by Region:</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Region</th>
+                    <th>Average Age</th>
+                    <th>Average BMI</th>
+                    <th>Average Children</th>
+                    <th>Average Charges</th>
+                    <th>Smokers</th>
+                    <th>Non-Smokers</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for region in region_data %}
+                <tr>
+                    <td>{{ region['region'] }}</td>
+                    <td>{{ region['avg_age'] }}</td>
+                    <td>{{ region['avg_bmi'] }}</td>
+                    <td>{{ region['avg_children'] }}</td>
+                    <td>{{ region['avg_charges'] }}</td>
+                    <td>{{ region['smoker_count'] }}</td>
+                    <td>{{ region['non_smoker_count'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</body>
+</html>

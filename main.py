@@ -50,6 +50,9 @@ def user():
 def main():
     context = {"view": None}  # Default view
 
+    # Reload the user data every time the page is accessed
+    userDataFrame = pd.read_csv("userInsurance.csv")
+
     if request.method == "POST":
         # Determine which button was clicked and fetch data
         if "age" in request.form:
@@ -102,6 +105,9 @@ def main():
                 context["comparison_data"] = comparison_data
             else:
                 context["comparison_error"] = "No user data available for comparison."
+
+    return render_template("main.html", **context)
+
 
     return render_template("main.html", **context)
 
