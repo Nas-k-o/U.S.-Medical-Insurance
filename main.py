@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import zipfile
 import os
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+
 
 # Initialize Flask app
 app = Flask(__name__)

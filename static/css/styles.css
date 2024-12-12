@@ -110,3 +110,21 @@ body {
     color: #10162f;
     text-decoration: none;
 }
+
+.news-section {
+    margin: 40px auto;
+    text-align: center;
+    width: 90%;
+}
+
+.news-section h3 {
+    color: #66c4ff;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+}
+
+.news-section iframe {
+    border: 2px solid #66c4ff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
