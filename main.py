@@ -162,7 +162,6 @@ def download_region_stats():
     # Save the graph as an image
     image_path = 'region_stats_graph.png'
     plt.savefig(image_path)
-
     # Create a ZIP file containing both the CSV and the image
     zip_path = 'region_stats.zip'
     with zipfile.ZipFile(zip_path, 'w') as zipf:
@@ -188,6 +187,10 @@ def info():
 @app.route('/information')
 def information():
     return render_template("information.html")
+
+@app.route('/about')
+def about():
+    return render_template("about.html")
 
 
 if __name__ == '__main__':
