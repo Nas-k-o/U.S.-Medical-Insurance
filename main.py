@@ -78,7 +78,7 @@ def main():
             context["view"] = "smoker"
             smoker_counts = studyDataFrame["smoker"].value_counts()
             context["non_smoker"] = smoker_counts.get('no', 0)
-            context["smoker_count"] = smoker_counts.get('yes', 0)
+            context["smoker"] = smoker_counts.get('yes', 0)
         elif "region" in request.form:
             context["view"] = "region"
             context["region_counts"] = studyDataFrame["region"].value_counts().to_dict()
