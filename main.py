@@ -178,7 +178,7 @@ def download_region_stats():
 
 @app.route('/download_csv')
 def csvD():
-    csv_file = 'insurance.csv'
+    csv_file = 'StudyData.xlsx'
     return send_file(csv_file, as_attachment=True)
 
 @app.route('/info')
