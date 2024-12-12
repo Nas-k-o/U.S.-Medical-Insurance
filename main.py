@@ -185,5 +185,10 @@ def csvD():
 def info():
     return render_template("info.html")
 
+@app.route('/information')
+def information():
+    return render_template("information.html")
+
+
 if __name__ == '__main__':
     app.run(debug=True)

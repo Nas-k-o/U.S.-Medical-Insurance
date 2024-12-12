@@ -1,0 +1,124 @@
+/* General body and layout settings */
+body {
+    background-color: #10162f; /* Dark purple background */
+    color: #66c4ff; /* Light blue text color */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header styling */
+.head {
+    text-align: center;
+    padding: 40px 20px;
+    background-color: #1c2a46; /* Darker purple background */
+    border-bottom: 2px solid #66c4ff;
+}
+
+.head h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+.head h2 {
+    font-size: 1.8em;
+    margin-top: 0;
+    font-weight: 300;
+}
+
+/* Intro section styling */
+.intro {
+    text-align: left;
+    margin: 50px auto;
+    width: 80%;
+}
+
+.intro h3 {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+.intro p {
+    font-size: 1.2em;
+    line-height: 1.6;
+    margin: 10px 0;
+}
+
+/* Section styling */
+.Section {
+    text-align: left;
+    margin: 50px auto;
+    padding: 20px;
+    width: 80%;
+    background-color: #1c2a46; /* Dark background for sections */
+    border-radius: 8px;
+    border: 1px solid #66c4ff;
+}
+
+.Section h3 {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.Section ul {
+    list-style-type: disc;
+    margin-left: 20px;
+}
+
+.Section li {
+    font-size: 1.2em;
+    line-height: 1.8;
+    margin-bottom: 10px;
+}
+
+.Section p {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+
+/* Footer styling */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #1c2a46;
+    border-top: 2px solid #66c4ff;
+    margin-top: 50px;
+}
+
+footer p {
+    font-size: 1.2em;
+    color: #66c4ff;
+}
+
+footer a {
+    color: #66c4ff;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+
+.button-36 {
+    background-color: #66c4ff; /* Light blue background for buttons */
+    color: #10162f; /* Dark purple text color */
+    border: none;
+    padding: 15px 30px;
+    margin: 10px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 1.2em;
+    transition: background-color 0.3s, transform 0.2s ease;
+}
+
+button-36:hover {
+    background-color: #3b4a6f; /* Lighter purple background on hover */
+    transform: scale(1.05); /* Slight zoom effect */
+}
+
+/* Link inside button to look better */
+button-36 a {
+    color: #10162f;
+    text-decoration: none;
+}
