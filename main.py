@@ -176,6 +176,11 @@ def download_region_stats():
     # Send the ZIP file as a downloadable attachment
     return send_file(zip_path, as_attachment=True, download_name="region_stats.zip", mimetype='application/zip')
 
+@app.route('/download_csv')
+def csvD():
+    csv_file = 'insurance.csv'
+    return send_file(csv_file, as_attachment=True)
+
 @app.route('/info')
 def info():
     return render_template("info.html")

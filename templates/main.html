@@ -108,6 +108,15 @@
 </head>
 <body>
     <h1>Insurance Analysis Tool</h1>
+    <H3>About the study</H3>
+    <p>The study contains more than 1300rows of data of random individuals, around the country. As you can see below, the data is sorted equally between regions and genders.</p>
+    <p>All of the people which took part of the study did it voluntarily and you can download the servey report for free! </p>
+    <p>Download the Study Data</p>
+    <div class="download-button">
+    <form action="/download_csv" method="get">
+        <button type="submit" class="button-36">Download Study Data CSV</button>
+    </form>
+    </div>
     <form method="POST" action="/main">
         <button name="age">Average Age</button>
         <button name="gender">Gender Distribution</button>
@@ -144,17 +153,25 @@
     {% elif view == "smoker" %}
         <h2>Smoker vs Non-Smoker</h2>
         <p>Smokers: {{ smoker }} | Non-Smokers: {{ non_smoker }}</p>
+        <h2>Good to know</h2>
+        <p>In the United States, the percentage of adults who smoke has significantly declined over the decades. As of 2020, only about 12.5% of adults were current smokers, compared to 42% in 1965. That means nearly 87.5% of adults in the U.S. are now non-smokers, a stark contrast to the smoking culture of past decades!
+            This change is largely attributed to public health campaigns, increased awareness of the risks of smoking, and the rising popularity of smoke-free alternatives. Interestingly, studies have shown that non-smokers not only live longer but also save an average of $2,292 annually by not buying cigarettes—a strong motivation for many to quit!</p>
     {% elif view == "region" %}
         <h2>Region Analysis</h2>
+        <p>Currently, the people per region in our study are balanced</p>
         <ul>
             {% for region, count in region_counts.items() %}
-                <li><a href="{{ url_for('region_stats') }}">{{ region }}: {{ count }}</a></li>
+                <li>{{ region }}: {{ count }}</li>
             {% endfor %}
         </ul>
     {% elif view == "charges" %}
+        <h2>Fun fact</h2>
+        <p>The average annual health insurance premium for a single person in 2023 was approximately $7,911, while for families it soared to $22,463. That's roughly the cost of buying a brand-new small car every year—or a lifetime supply of donuts (about 150,000 donuts)! 🍩
+            It’s no surprise many people feel like health insurance costs take a big bite out of their wallets!</p>
         <h2>Average Charges</h2>
         <p>The average charges in the dataset are: ${{ avg_charge }}</p>
     {% elif view == "compare" %}
+
         <h2>Comparison Results</h2>
         {% if comparison_data %}
             <table>
