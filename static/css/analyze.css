@@ -88,9 +88,13 @@ form button {
 }
 
 /* Section headers within the content */
-section h3 {
+h3 {
     color: #66c4ff;
     font-size: 1.8em;
-    text-align: center;
+    text-align: left;
     margin-bottom: 10px;
+}
+
+p{
+    text-align: left;
 }

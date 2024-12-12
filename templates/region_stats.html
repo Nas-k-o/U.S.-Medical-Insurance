@@ -7,7 +7,27 @@
     <title>Region Statistics</title>
 </head>
 <body>
-    <h1>Region-Based Statistics</h1>
+    <div class="head">
+        <h1>Medical Insurance in US Regions</h1>
+        <h2>Northwest, Northeast, Southwest, and Southeast</h2>
+    </div>
+
+    <div class="intro">
+        <h3>Northwest</h3>
+        <p>The Northwest region, including Washington, Oregon, and Idaho, has a high focus on preventive care and wellness. Many residents benefit from employer-provided insurance, and the region sees lower-than-average uninsured rates due to robust Medicaid expansion efforts.</p>
+
+        <h3>Northeast</h3>
+        <p>The Northeast, with states like New York, Massachusetts, and Pennsylvania, has some of the most comprehensive healthcare systems. The region is known for high insurance premiums but offers extensive coverage options. Massachusetts was a pioneer in healthcare reform, leading to low uninsured rates.</p>
+
+        <h3>Southwest</h3>
+        <p>In the Southwest, states like Arizona, New Mexico, and parts of Texas face challenges with higher uninsured rates, especially in rural areas. Medicaid expansion has helped many, but the region still struggles with affordability and access in certain communities.</p>
+
+        <h3>Southeast</h3>
+        <p>The Southeast, including Florida, Georgia, and the Carolina's, has some of the highest uninsured rates in the country. Economic disparities and limited Medicaid expansion have contributed to this issue. However, insurance marketplaces have provided vital coverage to many residents.</p>
+    </div>
+
+    <div class="Section">
+       <h1>Region-Based Statistics</h1>
     <p>Despite the fact, that region factor is not part of the calculations for the Medical Insurances, there are differences in some data entries! See some of the main differences with the button below:<p>
     <form method="POST">
         <button type="submit">Show Region Statistics</button>
@@ -49,7 +69,10 @@
         <button type="submit" class="button-36">Download Region Stats (CSV) + Graph</button>
     </form>
 </div>
+    </div>
+
 <button class="button-36" role="button"><a href="{{ url_for('index') }}">Back to Home</a></button>
+
 
 </body>
 </html>
