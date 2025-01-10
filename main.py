@@ -3,6 +3,26 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import zipfile
 import os
+import mysql.connector
+
+# Connect to MySQL database
+def connect_to_database():
+    try:
+        connection = mysql.connector.connect(
+            host="localhost",          # Replace with your database host
+            user="root",      # Replace with your MySQL username
+            password="root",  # Replace with your MySQL password
+            database="usmi"   # Replace with your database name
+        )
+        if connection.is_connected():
+            print("Connected to the database")
+            return connection
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+        return None
+
+# Example usage
+db_connection = connect_to_database()
 
 
 # Initialize Flask app
@@ -192,6 +212,8 @@ def information():
 def about():
     return render_template("about.html")
 
+connect_to_database()
 
 if __name__ == '__main__':
     app.run(debug=True)
+
