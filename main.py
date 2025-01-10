@@ -10,9 +10,9 @@ def connect_to_database():
     try:
         connection = mysql.connector.connect(
             host="localhost",          # Replace with your database host
-            user="root",      # Replace with your MySQL username
-            password="root",  # Replace with your MySQL password
-            database="usmi"   # Replace with your database name
+            user="root",               # Replace with your MySQL username
+            password="root",           # Replace with your MySQL password
+            database="usmi"            # Replace with your database name
         )
         if connection.is_connected():
             print("Connected to the database")
@@ -21,16 +21,23 @@ def connect_to_database():
         print(f"Error: {err}")
         return None
 
-# Example usage
-db_connection = connect_to_database()
-
+# Fetch data from the STUDY table
+def fetch_study_data():
+    connection = connect_to_database()
+    if connection:
+        query = "SELECT * FROM STUDY"
+        study_df = pd.read_sql(query, connection)
+        connection.close()
+        return study_df
+    else:
+        print("Failed to connect to the database.")
+        return pd.DataFrame()
 
 # Initialize Flask app
 app = Flask(__name__)
 
-# Read the CSV data
-studyDataFrame = pd.read_csv("insurance.csv")
-userDataFrame = pd.read_csv("userInsurance.csv")
+# Load study data into a DataFrame
+studyDataFrame = fetch_study_data()
 
 @app.route('/')
 def index():
@@ -52,21 +59,21 @@ def user():
         s_cost = 1 if smoker.lower() == "yes" else 0
 
         # Estimate the cost
-        cost = 250*age - 128*g_cost + 370*bmi + 425*n_children + 24000*s_cost - 12500
+        cost = 250 * age - 128 * g_cost + 370 * bmi + 425 * n_children + 24000 * s_cost - 12500
 
-        # Save user data
-        saveToCsv = {
-            "age": age,
-            "sex": gender,
-            "bmi": bmi,
-            "children": n_children,
-            "smoker": smoker,
-            "region": region,
-            "charges": cost
-        }
-
-        # Append user data to CSV (you can also save to a database if needed)
-        pd.DataFrame([saveToCsv]).to_csv("userInsurance.csv", index = False)
+        # Save user data to the database
+        connection = connect_to_database()
+        if connection:
+            cursor = connection.cursor()
+            insert_query = """
+                INSERT INTO USER_INSURANCE (age, sex, bmi, children, smoker, region, charges)
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
+            """
+            values = (age, gender, bmi, n_children, smoker, region, cost)
+            cursor.execute(insert_query, values)
+            connection.commit()
+            cursor.close()
+            connection.close()
 
         return render_template("user_input.html", cost=cost)
     return render_template("user_input.html")
@@ -75,11 +82,7 @@ def user():
 def main():
     context = {"view": None}  # Default view
 
-    # Reload the user data every time the page is accessed
-    userDataFrame = pd.read_csv("userInsurance.csv")
-
     if request.method == "POST":
-        # Determine which button was clicked and fetch data
         if "age" in request.form:
             context["view"] = "age"
             context["avg_age"] = round(studyDataFrame["age"].mean(), 2)
@@ -105,34 +108,6 @@ def main():
         elif "charges" in request.form:
             context["view"] = "charges"
             context["avg_charge"] = round(studyDataFrame["charges"].mean(), 2)
-        elif "compare" in request.form:
-            context["view"] = "compare"
-            if not userDataFrame.empty:
-                user_data = userDataFrame.iloc[0]
-                study_averages = {
-                    "Age": round(studyDataFrame["age"].mean(), 2),
-                    "BMI": round(studyDataFrame["bmi"].mean(), 2),
-                    "Children": round(studyDataFrame["children"].mean(), 2),
-                    "Charges": round(studyDataFrame["charges"].mean(), 2)
-                }
-
-                comparison_data = {
-                    "User Age": user_data["age"],
-                    "Average Age": study_averages["Age"],
-                    "User BMI": user_data["bmi"],
-                    "Average BMI": study_averages["BMI"],
-                    "User Children": user_data["children"],
-                    "Average Children": study_averages["Children"],
-                    "User Charges": user_data["charges"],
-                    "Average Charges": study_averages["Charges"]
-                }
-
-                context["comparison_data"] = comparison_data
-            else:
-                context["comparison_error"] = "No user data available for comparison."
-
-    return render_template("main.html", **context)
-
 
     return render_template("main.html", **context)
 
@@ -141,7 +116,6 @@ def region_stats():
     context = {"view": "region_stats"}
 
     if request.method == "POST":
-        # Calculate statistics for each region
         region_data = studyDataFrame.groupby('region').agg(
             avg_age=('age', 'mean'),
             avg_bmi=('bmi', 'mean'),
@@ -155,10 +129,8 @@ def region_stats():
 
     return render_template("region_stats.html", **context)
 
-
 @app.route('/download_region_stats', methods=["GET"])
 def download_region_stats():
-    # Calculate statistics for each region
     region_data = studyDataFrame.groupby('region').agg(
         avg_age=('age', 'mean'),
         avg_bmi=('bmi', 'mean'),
@@ -168,52 +140,35 @@ def download_region_stats():
         non_smoker_count=('smoker', lambda x: (x == 'no').sum())
     ).reset_index()
 
-    # Save the region data to a CSV file
     csv_path = 'region_stats.csv'
     region_data.to_csv(csv_path, index=False)
 
-    # Generate a graph (e.g., bar chart for average charges per region)
     plt.figure(figsize=(10, 6))
     plt.bar(region_data['region'], region_data['avg_charges'], color='skyblue')
     plt.title('Average Charges per Region')
     plt.xlabel('Region')
     plt.ylabel('Average Charges')
 
-    # Save the graph as an image
     image_path = 'region_stats_graph.png'
     plt.savefig(image_path)
-    # Create a ZIP file containing both the CSV and the image
+
     zip_path = 'region_stats.zip'
     with zipfile.ZipFile(zip_path, 'w') as zipf:
         zipf.write(csv_path)
         zipf.write(image_path)
 
-    # Remove the temporary files after adding them to the ZIP
     os.remove(csv_path)
     os.remove(image_path)
 
-    # Send the ZIP file as a downloadable attachment
     return send_file(zip_path, as_attachment=True, download_name="region_stats.zip", mimetype='application/zip')
-
-@app.route('/download_csv')
-def csvD():
-    csv_file = 'StudyData.xlsx'
-    return send_file(csv_file, as_attachment=True)
 
 @app.route('/info')
 def info():
     return render_template("info.html")
 
-@app.route('/information')
-def information():
-    return render_template("information.html")
-
 @app.route('/about')
 def about():
     return render_template("about.html")
 
-connect_to_database()
-
 if __name__ == '__main__':
     app.run(debug=True)
-
